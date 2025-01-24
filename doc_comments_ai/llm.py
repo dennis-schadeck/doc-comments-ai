@@ -26,7 +26,7 @@ class LLM:
         azure_deployment: "str | None" = None,
         ollama: "tuple[str,str] | None" = None,
     ):
-        max_tokens = 2048 if model == GptModel.GPT_35 else 4096
+        max_tokens = 2048 if model == GptModel.GPT_35 else 16000
         if local_model is not None:
             self.install_llama_cpp()
 
@@ -35,12 +35,14 @@ class LLM:
                 temperature=0.8,
                 max_tokens=max_tokens,
                 verbose=False,
+                n_ctx = 16000,
             )
         elif azure_deployment is not None:
             self.llm = ChatLiteLLM(
                 temperature=0.8,
                 max_tokens=max_tokens,
                 model=f"azure/{azure_deployment}",
+                n_ctx = 16000,
             )
         elif ollama is not None:
             self.llm = Ollama(
